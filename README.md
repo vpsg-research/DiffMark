@@ -11,7 +11,7 @@ Deepfakes pose significant security and privacy threats through malicious facial
 ## 🚀 Introduction
 
 <div align="center">
-    <img width="400" alt="image" src="figs\first.png">
+    <img width="1000" alt="image" src="figs\first.png">
 </div>
 
 <div align="center">
