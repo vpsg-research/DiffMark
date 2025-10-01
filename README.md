@@ -72,7 +72,7 @@ Visualization in DiffMark.
 
 
 
-## Citation
+## 📜 Citation
 @article{sun2025diffmark,
   title={DiffMark: Diffusion-based Robust Watermark Against Deepfakes},
   author={Chen Sun, Haiyang Sun, Zhiqing Guo, Yunfeng Diao, Liejun Wang, Dan Ma, and Gaobo Yang},
