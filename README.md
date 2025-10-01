@@ -1,6 +1,6 @@
 <div align="center">
 
-<h1>【Information Fusion 2025】DiffMark: Diffusion-based Robust Watermark Against Deepfakes</h1>
+<h1>【INFFUS 2025】DiffMark: Diffusion-based Robust Watermark Against Deepfakes</h1>
 
 </div>
 
