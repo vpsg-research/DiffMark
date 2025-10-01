@@ -69,7 +69,7 @@ python scripts/image_test.py
 
 <div align="center">
 Visualization in DiffMark.
-
+</div>
 
 
 ## 📜 Citation
