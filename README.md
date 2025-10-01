@@ -1,6 +1,6 @@
 <div align="center">
 
-<h1>DiffMark: Diffusion-based Robust Watermark Against Deepfakes</h1>
+<h1>【Information Fusion 2025】DiffMark: Diffusion-based Robust Watermark Against Deepfakes</h1>
 
 </div>
 
@@ -69,3 +69,11 @@ python scripts/image_test.py
 
 <div align="center">
 Visualization in DiffMark.
+
+## Citation
+@article{sun2025diffmark,
+  title={DiffMark: Diffusion-based Robust Watermark Against Deepfakes},
+  author={Chen Sun, Haiyang Sun, Zhiqing Guo, Yunfeng Diao, Liejun Wang, Dan Ma, and Gaobo Yang},
+  journal={Information Fusion},
+  year={2025}
+}
