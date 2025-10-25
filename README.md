@@ -1,4 +1,4 @@
-# 【Information Fusion 2025】DiffMark: Diffusion-based Robust Watermark Against Deepfakes
+# DiffMark: Diffusion-based Robust Watermark Against Deepfakes
 
 <br>
 This is the implementation of the paper "DiffMark: Diffusion-based Robust Watermark Against Deepfakes".
