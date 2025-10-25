@@ -1,83 +1,99 @@
-<div align="center">
+# DiffMark: Diffusion-based Robust Watermark Against Deepfakes
 
-<h1>【INFFUS 2025】DiffMark: Diffusion-based Robust Watermark Against Deepfakes</h1>
+<br>
+This is the implementation of the paper "DiffMark: Diffusion-based Robust Watermark Against Deepfakes".
 
-</div>
+It must be acknowledged that this work still has several limitations. Nevertheless, I sincerely hope it may be helpful to your research. Best wishes!
 
-## ⭐ Abstract
-
-Deepfakes pose significant security and privacy threats through malicious facial manipulations. While robust watermarking can aid in authenticity verification and source tracking, existing methods often lack the sufficient robustness against Deepfake manipulations. Diffusion models have demonstrated remarkable performance in image generation, enabling the seamless fusion of watermark with image during generation. In this study, we propose a novel robust watermarking framework based on diffusion model, called DiffMark. By modifying the training and sampling scheme, we take the facial image and watermark as conditions to guide the diffusion model to progressively denoise and generate corresponding watermarked image. In the construction of facial condition, we weight the facial image by a timestep-dependent factor that gradually reduces the guidance intensity with the decrease of noise, thus better adapting to the sampling process of diffusion model. To achieve the fusion of watermark condition, we introduce a cross information fusion (CIF) module that leverages a learnable embedding table to adaptively extract watermark features and integrates them with image features via cross-attention. To enhance the robustness of the watermark against Deepfake manipulations, we integrate a frozen autoencoder during training phase to simulate Deepfake manipulations. Additionally, we introduce Deepfake-resistant guidance that employs specific Deepfake model to adversarially guide the diffusion sampling process to generate more robust watermarked images. Experimental results demonstrate the effectiveness of the proposed DiffMark on typical Deepfakes.
-
-## 🚀 Introduction
-
-<div align="center">
-    <img width="1000" alt="image" src="figs\first.png">
-</div>
-
-<div align="center">
-The difference between our method and the existing methods.
-</div>
-
-## 📻 Overview
-
-<div align="center">
-    <img width="1000" alt="image" src="figs\framework.png">
-</div>
-
-<div align="center">
-Illustration of the overall architecture of DiffMark.
-</div>
-
-## 📑 TODO
+## TODO
 
 - [x] Project page released
 - [x] Dataset preparation instructions released
-- [ ] Release of core implementation
-- [ ] Release of training and evaluation scripts
-- [ ] Pretrained model and demo
+- [x] Model code released
+- [x] Training and evaluation scripts released
 
-## 🖥️ Environment Setup
+## Environment
 
-```python
-conda env create -f environment.yml
+Please refer to environment.txt.
+
+## Datasets
+
+This model is trained on the CelebA-HQ dataset and evaluated on both CelebA-HQ and LFW datasets at resolutions of 128×128 and 256×256. We do not own these datasets; they can be downloaded from their respective official websites.
+
+- [CelebA-HQ](https://mmlab.ie.cuhk.edu.hk/projects/CelebA.html)
+- [LFW](https://vis-www.cs.umass.edu/lfw/)
+
+## Noise Layers
+
+Please download the [autoencoder](https://ommer-lab.com/files/latent-diffusion/vq-f4.zip) from Stable-Diffusion and place it at ./noise_layers/ldm/models/checkpoints/vq-f4 for training.
+
+The following Deepfake models are used for testing in our experiments:
+
+- [SimSwap](https://github.com/neuralchen/SimSwap)
+- [UniFace](https://github.com/xc-csc101/UniFace)
+- [CSCS](https://github.com/ICTMCG/CSCS)
+- [StarGAN](https://github.com/yunjey/stargan)
+- [FSRT](https://github.com/andrerochow/fsrt)
+
+Since we don't own the source code, we recommend downloading and placing the model source code and weights by yourself. We provide the corresponding python scripts for processing.
+
+## Train
+
+- 128x128 model:
+
+```
+MODEL_FLAGS="--attention_resolutions 16,8 --image_size 128 --message_length 30 --embedding_dim 256 --num_channels 32 --num_heads 4 --num_res_blocks 1"
+TRAIN_FLAGS="--data_dir CelebA-HQ/train_128 --batch_size 16 --lr 1e-4 --lr_anneal_steps 151200 --weight_decay 1e-5 --threshold 5000"
 ```
 
-## 📁 Datasets
+- 256x256 model:
 
-DiffMark is trained on the CelebA-HQ dataset and evaluated on both CelebA-HQ and LFW datasets at resolutions of 128×128 and 256×256. We do not own these datasets; they can be downloaded from their respective official websites.
-
-- [Download CelebA-HQ](https://mmlab.ie.cuhk.edu.hk/projects/CelebA.html)
-- [Download LFW](https://vis-www.cs.umass.edu/lfw/)
-
-## 🔧 Train
-
-```python
-python scripts/image_train.py
+```
+MODEL_FLAGS="--attention_resolutions 32,16,8 --image_size 256 --message_length 128 --embedding_dim 1024 --num_channels 64 --num_heads 4 --num_res_blocks 1"
+TRAIN_FLAGS="--data_dir CelebA-HQ/train_256 --batch_size 16 --lr 1e-4 --lr_anneal_steps 151200 --weight_decay 1e-5 --threshold 10000"
 ```
 
-## 🧪 Test
+- Train Command:
 
 ```python
-python scripts/image_test.py
+python scripts/image_train.py $MODEL_FLAGS $TRAIN_FLAGS
 ```
 
-## 🖼️ Visualization
+## Test
 
-<div align="center">
-    <img width="1000" alt="image" src="figs\vision.png">
-</div>
+- 128x128 model:
 
-<div align="center">
-Visualization in DiffMark.
-</div>
+```
+MODEL_FLAGS="--attention_resolutions 16,8 --image_size 128 --message_length 30 --embedding_dim 256 --num_channels 32 --num_heads 4 --num_res_blocks 1"
+TEST_FLAGS="--model_path ema_0.9999_151200.pt --data_dir CelebA-HQ/test_128 --batch_size 16 --rescale_timesteps True --timestep_respacing ddim10 --cover_dir CelebA-HQ --use_guidance False"
+```
 
+- 256x256 model:
 
-## 📜 Citation
+```
+MODEL_FLAGS="--attention_resolutions 32,16,8 --image_size 256 --message_length 128 --embedding_dim 1024 --num_channels 64 --num_heads 4 --num_res_blocks 1"
+TEST_FLAGS="--model_path ema_0.9999_151200.pt --data_dir CelebA-HQ/test_256 --batch_size 16 --rescale_timesteps True --timestep_respacing ddim10 --cover_dir CelebA-HQ --use_guidance False"
+```
+
+- Test Command:
+
+```python
+python scripts/image_test.py $MODEL_FLAGS $TEST_FLAGS
+```
+
+- To enable deepfake-resistant guidance, set use_guidance to True.
+
+## Acknowledgements
+
+This work is inspired by remarkable studies such as [Guided-Diffusion](https://github.com/openai/guided-diffusion), [Stable-Diffusion](https://github.com/CompVis/stable-diffusion), [SepMark](https://github.com/sh1newu/SepMark) and [LampMark](https://github.com/wangty1/LampMark), with [Guided-Diffusion](https://github.com/openai/guided-diffusion) being a foundational inspiration. We extend our sincere thanks to all the contributors of these works.
+
+## Citation
+
 ```bibtex
-@article{sun2025diffmark,
-  title={DiffMark: Diffusion-based Robust Watermark Against Deepfakes},
-  author={Chen Sun, Haiyang Sun, Zhiqing Guo, Yunfeng Diao, Liejun Wang, Dan Ma, and Gaobo Yang},
-  journal={Information Fusion},
-  year={2025}
+@article{SUN2025103801,
+  title = {DiffMark: Diffusion-based Robust Watermark Against Deepfakes},
+  author = {Chen Sun and Haiyang Sun and Zhiqing Guo and Yunfeng Diao and Liejun Wang and Dan Ma and Gaobo Yang and Keqin Li},
+  journal = {Information Fusion},
+  year = {2025},
 }
 ```
