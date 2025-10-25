@@ -1,0 +1,45 @@
+noise_layer:
+  # - Identity()
+  # - Resize()
+  # - Dropout()
+  # - GaussianNoise()
+  # - SaltPepper()
+  # - GaussianBlur()
+  # - MedianBlur()
+  # - Brightness()
+  # - Contrast()
+  # - Saturation()
+  # - Hue()
+  # - JpegTest()
+  - SimSwap()
+  # - UniFaceSwap()
+  # - CSCS()
+  # - StarGAN()
+  # - Fsrt()
+  # - VQGAN()
+
+guide_layer:
+  - SimSwap()
+
+autoencoder:
+  target: noise_layers.ldm.models.autoencoder.VQModelInterface
+  params:
+    embed_dim: 3
+    n_embed: 8192
+    ckpt_path: noise_layers/ldm/models/checkpoints/vqgan/model.ckpt
+    ddconfig:
+      double_z: false
+      z_channels: 3
+      resolution: 256
+      in_channels: 3
+      out_ch: 3
+      ch: 128
+      ch_mult:
+        - 1
+        - 2
+        - 4
+      num_res_blocks: 2
+      attn_resolutions: []
+      dropout: 0.0
+    lossconfig:
+      target: torch.nn.Identity
