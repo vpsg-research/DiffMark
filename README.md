@@ -1,4 +1,4 @@
-# DiffMark: Diffusion-based Robust Watermark Against Deepfakes
+# 【INFFUS'25】DiffMark: Diffusion-based Robust Watermark Against Deepfakes
 
 <br>
 This is the implementation of the paper "DiffMark: Diffusion-based Robust Watermark Against Deepfakes".
